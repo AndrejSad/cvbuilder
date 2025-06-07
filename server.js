@@ -16,16 +16,18 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-// Upravený helmet s vlastným CSP
+// Upravený helmet s vlastným CSP bez 'unsafe-eval' (bezpečnejšie)
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-eval'"],
-        connectSrc: ["'self'", "data:"],
-        imgSrc: ["'self'", "data:"],
-        // Prípadne môžeš pridať styleSrc, fontSrc, atď., podľa potreby
+        scriptSrc: ["'self'"],              // odstránil som 'unsafe-eval'
+        connectSrc: ["'self'", "data:"],   // povoliť fetch/WS na self a data:
+        imgSrc: ["'self'", "data:"],       // povoliť obrázky zo self a data:
+        styleSrc: ["'self'", "'unsafe-inline'"], // inline štýly povolené, ak ich potrebuješ
+        fontSrc: ["'self'"],               // fonty len z vlastného servera
+        objectSrc: ["'none'"],             // zakázať object/embed
       },
     },
   })
