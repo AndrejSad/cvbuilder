@@ -15,18 +15,36 @@ const PORT = process.env.PORT || 10000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(helmet());
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minút
-  max: 100 // max 100 požiadaviek za 15 minút
-}));
+
+// Upravený helmet s vlastným CSP
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-eval'"],
+        connectSrc: ["'self'", "data:"],
+        imgSrc: ["'self'", "data:"],
+        // Prípadne môžeš pridať styleSrc, fontSrc, atď., podľa potreby
+      },
+    },
+  })
+);
+
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minút
+    max: 100, // max 100 požiadaviek za 15 minút
+  })
+);
 
 // Pripojenie k MongoDB Atlas cez .env
-mongoose.connect(process.env.MONGODB_URI)
+mongoose
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB Atlas pripojené!');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Chyba pripojenia k MongoDB Atlas:', err);
   });
 
@@ -49,7 +67,9 @@ app.post('/api/register', async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Používateľ s týmto emailom už existuje.' });
+      return res
+        .status(409)
+        .json({ message: 'Používateľ s týmto emailom už existuje.' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
@@ -59,7 +79,9 @@ app.post('/api/register', async (req, res) => {
     });
     await user.save();
 
-    res.status(201).json({ message: 'Registrácia úspešná! Môžete sa prihlásiť.' });
+    res
+      .status(201)
+      .json({ message: 'Registrácia úspešná! Môžete sa prihlásiť.' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Chyba servera.' });
@@ -93,6 +115,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server beží na porte ${PORT}`);
-  });
-  
+  console.log(`Server beží na porte ${PORT}`);
+});
