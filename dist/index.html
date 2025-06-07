@@ -6,8 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CV Builder</title>
 
-    <!-- Pridaný CSP meta tag -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src 'self' data:; img-src 'self' data:;">
+    <!-- Pridaný CSP meta tag so širšími povoleniami -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self' data:;
+      script-src 'self' 'unsafe-eval';
+      connect-src 'self' data:;
+      img-src 'self' data:;
+      style-src 'self' 'unsafe-inline';
+    " />
 
     <script type="module" crossorigin src="/assets/index-2c31d27a.js"></script>
     <link rel="stylesheet" href="/assets/index-7586047c.css" />
