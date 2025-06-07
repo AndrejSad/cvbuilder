@@ -16,18 +16,18 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-// Upravený helmet s vlastným CSP bez 'unsafe-eval' (bezpečnejšie)
+// Upravený helmet s CSP s povoleným 'unsafe-eval' (pre WebAssembly)
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],              // odstránil som 'unsafe-eval'
-        connectSrc: ["'self'", "data:"],   // povoliť fetch/WS na self a data:
-        imgSrc: ["'self'", "data:"],       // povoliť obrázky zo self a data:
-        styleSrc: ["'self'", "'unsafe-inline'"], // inline štýly povolené, ak ich potrebuješ
-        fontSrc: ["'self'"],               // fonty len z vlastného servera
-        objectSrc: ["'none'"],             // zakázať object/embed
+        scriptSrc: ["'self'", "'unsafe-eval'"], // umožni WebAssembly fungovať
+        connectSrc: ["'self'", "data:"],
+        imgSrc: ["'self'", "data:"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
       },
     },
   })
@@ -35,12 +35,12 @@ app.use(
 
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minút
-    max: 100, // max 100 požiadaviek za 15 minút
+    windowMs: 15 * 60 * 1000,
+    max: 100,
   })
 );
 
-// Pripojenie k MongoDB Atlas cez .env
+// Pripojenie k MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -54,13 +54,10 @@ mongoose
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // ===== API ENDPOINTY =====
-
-// Testovacia API trasa
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API funguje!' });
 });
 
-// Registrácia s hashovaním hesla
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -74,23 +71,15 @@ app.post('/api/register', async (req, res) => {
         .json({ message: 'Používateľ s týmto emailom už existuje.' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
+    const user = new User({ name, email, password: hashedPassword });
     await user.save();
-
-    res
-      .status(201)
-      .json({ message: 'Registrácia úspešná! Môžete sa prihlásiť.' });
+    res.status(201).json({ message: 'Registrácia úspešná! Môžete sa prihlásiť.' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Chyba servera.' });
   }
 });
 
-// Prihlásenie s porovnávaním hashovaného hesla
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -111,7 +100,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// ===== SPA FALLBACK (musí byť na konci!) =====
+// ===== SPA FALLBACK =====
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
