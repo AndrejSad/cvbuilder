@@ -28,6 +28,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
+        frameSrc: ["'self'", "blob:"],
       },
     },
   })
