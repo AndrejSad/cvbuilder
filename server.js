@@ -22,7 +22,11 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-eval'", "https://www.statcounter.com"],
+        scriptSrc: [
+                    "'self'",
+                   "'unsafe-eval'",
+                   "https://www.statcounter.com",
+                   "'sha256-Y0QvhK/fFJ2BopqqnBAJN6i+YlSusKfCnEZmav1nJmY='"],
         connectSrc: ["'self'", "data:"],
         imgSrc: ["'self'", "data:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
