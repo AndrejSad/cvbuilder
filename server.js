@@ -30,7 +30,11 @@ app.use(
   "'sha256-juPN3DSAsyUmU6Gex9+pgYX5kArUSpn3kTBziq/QUZs='", // ďalší hash, ktorý browser chce
   "'sha256-mDaz3N2KTcSPmtrcDObffpSs3djzkf4ZPmTD3ffMjes='"  // ďalší hash, ktorý browser chce
 ],
-        connectSrc: ["'self'", "data:"],
+        connectSrc: [
+          "'self'",
+          "data:",
+          "https://c.statcounter.com"
+        ],
         imgSrc: ["'self'", "data:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'"],
