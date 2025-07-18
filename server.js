@@ -23,10 +23,13 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: [
-                    "'self'",
-                   "'unsafe-eval'",
-                   "https://www.statcounter.com",
-                   "'sha256-Y0QvhK/fFJ2BopqqnBAJN6i+YlSusKfCnEZmav1nJmY='"],
+  "'self'",
+  "'unsafe-eval'",
+  "https://www.statcounter.com",
+  "'sha256-Y0QvhK/fFJ2BopqqnBAJN6i+YlSusKfCnEZmav1nJmY='", // hash pre Statcounter skript s tvojimi premennými
+  "'sha256-juPN3DSAsyUmU6Gex9+pgYX5kArUSpn3kTBziq/QUZs='", // ďalší hash, ktorý browser chce
+  "'sha256-mDaz3N2KTcSPmtrcDObffpSs3djzkf4ZPmTD3ffMjes='"  // ďalší hash, ktorý browser chce
+],
         connectSrc: ["'self'", "data:"],
         imgSrc: ["'self'", "data:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
