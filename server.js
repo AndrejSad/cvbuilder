@@ -22,7 +22,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-eval'"], // umožni WebAssembly fungovať
+        scriptSrc: ["'self'", "'unsafe-eval'", "https://www.statcounter.com"],
         connectSrc: ["'self'", "data:"],
         imgSrc: ["'self'", "data:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
