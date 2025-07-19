@@ -23,20 +23,22 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: [
-  "'self'",
-  "'unsafe-eval'",
-  "https://www.statcounter.com",
-  "'sha256-Y0QvhK/fFJ2BopqqnBAJN6i+YlSusKfCnEZmav1nJmY='", // hash pre Statcounter skript s tvojimi premennými
-  "'sha256-juPN3DSAsyUmU6Gex9+pgYX5kArUSpn3kTBziq/QUZs='", // ďalší hash, ktorý browser chce
-  "'sha256-mDaz3N2KTcSPmtrcDObffpSs3djzkf4ZPmTD3ffMjes='", // ďalší hash, ktorý browser chce
-   "blob:"
-],
+          "'self'",
+          "'unsafe-eval'",
+          // tvoje ďalšie povolenia...
+          "blob:"
+        ],
         connectSrc: [
           "'self'",
           "data:",
+          "blob:",
           "https://c.statcounter.com"
         ],
-        imgSrc: ["'self'", "data:"],
+        workerSrc: [
+          "'self'",
+          "blob:"
+        ],
+        imgSrc: ["'self'", "data:", "blob:"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
@@ -45,6 +47,7 @@ app.use(
     },
   })
 );
+
 
 app.use(
   rateLimit({
