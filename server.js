@@ -23,11 +23,12 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: [
-          "'self'",
-          "'unsafe-eval'",
-          // tvoje ďalšie povolenia...
-          "blob:"
-        ],
+  "'self'",
+  "'unsafe-eval'",
+  "blob:",
+  "https://www.statcounter.com"
+],
+
         connectSrc: [
           "'self'",
           "data:",
